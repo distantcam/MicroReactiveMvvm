@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net472</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Description>A MVVM toolbox of a bindable object, and commands that using Reactive Extensions.</Description>
+    <PackageTags>mvvm;rx;reactive;extensions;observable;LINQ;net;netstandard</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="nugets\**" />
+    <EmbeddedResource Remove="nugets\**" />
+    <None Remove="nugets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appveyor.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
+    <PackageReference Include="System.Reactive" Version="4.4.1" />
+  </ItemGroup>
+
+</Project>
