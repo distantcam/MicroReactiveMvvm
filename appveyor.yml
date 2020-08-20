@@ -2,4 +2,4 @@ image: Visual Studio 2019
 build_script:
 - cmd: dotnet pack --configuration Release
 artifacts:
-- path: nugets\*.nupkg
+- path: nugets\*.*
