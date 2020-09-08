@@ -2,7 +2,7 @@
 
 > A .NET library that provides reactive ViewModels and async commands
 
-![Under Development](https://img.shields.io/badge/under-development-orange.svg?style=flat-square) ![License from GitHub](https://img.shields.io/github/license/distantcam/microreactivemvvm?style=flat-square) ![Nuget](https://img.shields.io/nuget/v/microreactivemvvm?style=flat-square)  
+![Under Development](https://img.shields.io/badge/under-development-orange.svg?style=flat-square) ![License from GitHub](https://img.shields.io/github/license/distantcam/microreactivemvvm?style=flat-square) ![Nuget](https://img.shields.io/nuget/v/microreactivemvvm?style=flat-square) ![AppVeyor](https://img.shields.io/appveyor/build/distantcam/microreactivemvvm?style=flat-square)  
 ![.NET Standard 2.1](https://img.shields.io/badge/.NET-Standard%202.1-blue.svg?style=flat-square) ![.NET Framework 4.7.2](https://img.shields.io/badge/.NET-Framework%204.7.2-blue.svg?style=flat-square)
 
 <br>
