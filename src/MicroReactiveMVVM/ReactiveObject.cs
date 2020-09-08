@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace MicroReactiveMVVM
 {
-    public class BindableObject : IObservablePropertyChanged, IObservablePropertyChanging, IObservableDataErrorInfo, IDisposable, INotifyPropertyChanged, INotifyPropertyChanging, INotifyDataErrorInfo
+    public class ReactiveObject : IObservablePropertyChanged, IObservablePropertyChanging, IObservableDataErrorInfo, IDisposable, INotifyPropertyChanged, INotifyPropertyChanging, INotifyDataErrorInfo
     {
         private long changeNotificationSuppressionCount;
 
@@ -29,7 +29,7 @@ namespace MicroReactiveMVVM
         private readonly ConcurrentDictionary<string, string> errors = new ConcurrentDictionary<string, string>();
         private EventHandler<DataErrorsChangedEventArgs>? errorsChanged;
 
-        public BindableObject()
+        public ReactiveObject()
         {
             changed = new Subject<PropertyChangedData>();
             whenChanged = changed.AsObservable();
