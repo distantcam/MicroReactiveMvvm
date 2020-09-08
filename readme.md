@@ -9,7 +9,7 @@
 
 ## Documentation
 
-Documentation site here - https://distantcam.github.io/MicroReactiveMVVM/
+Documentation site here - https://distantcam.github.io/MicroReactiveMvvm/
 
 ## Installing
 
