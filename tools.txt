@@ -1,0 +1,5 @@
+dotnet tool install -g InheritDocTool
+
+dotnet tool install -g xmldocmd
+
+npm i -g docsify-cli
