@@ -18,13 +18,13 @@ namespace MicroReactiveMVVM
             new ObservableCommand(canExecuteObservable, action);
 
         public static IObservableCommand ToCommand(this IObservable<PropertyChangedData<bool>> canExecuteObservable, Func<object, Task> action) =>
-            new ObservableCommand(canExecuteObservable.Select(pc => pc.After), action);
+            new ObservableCommand(canExecuteObservable.Select(pc => pc.Value), action);
 
         public static IObservableCommand ToCommand(this IObservable<bool> canExecuteObservable, Action<object> action) =>
             new ObservableCommand(canExecuteObservable, p => { action(p); return Task.CompletedTask; });
 
         public static IObservableCommand ToCommand(this IObservable<PropertyChangedData<bool>> canExecuteObservable, Action<object> action) =>
-            new ObservableCommand(canExecuteObservable.Select(pc => pc.After), p => { action(p); return Task.CompletedTask; });
+            new ObservableCommand(canExecuteObservable.Select(pc => pc.Value), p => { action(p); return Task.CompletedTask; });
 
         public static IDisposable Execute<T>(this IObservable<T> observable, ICommand command) =>
             observable.Do(t => { if (command.CanExecute(t)) command.Execute(t); }).Subscribe();
