@@ -2,31 +2,31 @@
 {
     public class PropertyChangingData
     {
-        public PropertyChangingData(string propertyName, object? value)
+        public PropertyChangingData(string propertyName, object? before)
         {
             PropertyName = propertyName;
-            Value = value;
+            Before = before;
         }
 
         public string PropertyName { get; }
-        public object? Value { get; }
+        public object? Before { get; }
     }
 
     public class PropertyChangingData<TProperty>
     {
-        public PropertyChangingData(string propertyName, TProperty value)
+        public PropertyChangingData(string propertyName, TProperty before)
         {
             PropertyName = propertyName;
-            Value = value;
+            Before = before;
         }
 
         public string PropertyName { get; }
-        public TProperty Value { get; }
+        public TProperty Before { get; }
 
         public static implicit operator PropertyChangingData(PropertyChangingData<TProperty> data) =>
-            new PropertyChangingData(data.PropertyName, data.Value);
+            new PropertyChangingData(data.PropertyName, data.Before);
 
         public static explicit operator PropertyChangingData<TProperty>(PropertyChangingData data) =>
-            new PropertyChangingData<TProperty>(data.PropertyName, (TProperty)data.Value!);
+            new PropertyChangingData<TProperty>(data.PropertyName, (TProperty)data.Before!);
     }
 }

@@ -1,32 +1,48 @@
-﻿namespace MicroReactiveMVVM
+﻿using System;
+using System.Reflection;
+
+namespace MicroReactiveMVVM
 {
     public class PropertyChangedData
     {
-        public PropertyChangedData(string propertyName, object? value)
+        readonly Lazy<MethodInfo> propertyGetter;
+
+        public PropertyChangedData(object source, string propertyName)
         {
+            Source = source;
             PropertyName = propertyName;
-            Value = value;
+
+            propertyGetter = new Lazy<MethodInfo>(() => Source.GetType().GetProperty(PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy).GetGetMethod(true));
         }
 
+        public object Source { get; }
         public string PropertyName { get; }
-        public object? Value { get; }
+
+        public object? Value => propertyGetter.Value.Invoke(Source, null);
     }
 
     public class PropertyChangedData<TProperty>
     {
-        public PropertyChangedData(string propertyName, TProperty value)
+        readonly Lazy<MethodInfo> propertyGetter;
+
+        public PropertyChangedData(object source, string propertyName)
         {
+            Source = source;
             PropertyName = propertyName;
-            Value = value;
+
+            propertyGetter = new Lazy<MethodInfo>(() => Source.GetType().GetProperty(PropertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.FlattenHierarchy).GetGetMethod(true));
         }
 
+        public object Source { get; }
         public string PropertyName { get; }
-        public TProperty Value { get; }
+
+        public TProperty Value => (TProperty)propertyGetter.Value.Invoke(Source, null);
+
 
         public static implicit operator PropertyChangedData(PropertyChangedData<TProperty> data)
-            => new PropertyChangedData(data.PropertyName, data.Value);
+            => new PropertyChangedData(data.Source, data.PropertyName);
 
         public static explicit operator PropertyChangedData<TProperty>(PropertyChangedData data)
-            => new PropertyChangedData<TProperty>(data.PropertyName, (TProperty)data.Value!);
+            => new PropertyChangedData<TProperty>(data.Source, data.PropertyName);
     }
 }

@@ -99,16 +99,16 @@ namespace MicroReactiveMVVM
             }
         }
 
-        protected virtual void OnPropertyChanged(string propertyName, object value)
+        protected virtual void OnPropertyChanged(string propertyName)
         {
             if (ChangeNotificationEnabled)
-                changed.OnNext(new PropertyChangedData(propertyName, value));
+                changed.OnNext(new PropertyChangedData(this, propertyName));
         }
 
-        protected virtual void OnPropertyChanging(string propertyName, object value)
+        protected virtual void OnPropertyChanging(string propertyName, object? before)
         {
             if (ChangeNotificationEnabled)
-                changing.OnNext(new PropertyChangingData(propertyName, value));
+                changing.OnNext(new PropertyChangingData(propertyName, before));
         }
 
         public void SetDataError(string propertyName, string error) => errorChanged.OnNext(new DataErrorChanged(propertyName, error));
