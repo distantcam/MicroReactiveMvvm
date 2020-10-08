@@ -63,10 +63,14 @@ namespace MicroReactiveMVVM
             => observable.Select(data => (PropertyChangingData<TProperty>)data);
 
         public static IObservable<PropertyChangedData<TProperty>> OfPropertyType<TProperty>(this IObservable<PropertyChangedData> observable)
-            => observable.Where(data => data is PropertyChangedData<TProperty>).Select(data => (PropertyChangedData<TProperty>)data);
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+            => observable.Select(data => data as PropertyChangedData<TProperty>).Where(data => data != null);
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
 
         public static IObservable<PropertyChangingData<TProperty>> OfPropertyType<TProperty>(this IObservable<PropertyChangingData> observable)
-            => observable.Where(data => data is PropertyChangingData<TProperty>).Select(data => (PropertyChangingData<TProperty>)data);
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
+            => observable.Select(data => data as PropertyChangingData<TProperty>).Where(data => data != null);
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
 
         private static string GetPropertyName<TSource, TProperty>(Expression<Func<TSource, TProperty>> propertyLambda)
         {
