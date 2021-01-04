@@ -53,18 +53,7 @@ namespace MicroReactiveMVVM
             whenErrorChanged.ObserveOnMain()
                 .Subscribe(args =>
                 {
-                    if (string.IsNullOrEmpty(args.Error))
-                    {
-                        errors.TryRemove(args.PropertyName, out _);
-                    }
-                    else
-                    {
-                        errors.AddOrUpdate(args.PropertyName, new List<string> { args.Error }, (_, list) =>
-                        {
-                            list.Add(args.Error);
-                            return list;
-                        });
-                    }
+
                     errorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(args.PropertyName));
                 });
         }
@@ -116,9 +105,28 @@ namespace MicroReactiveMVVM
                 changing.OnNext(new PropertyChangingData(propertyName, before));
         }
 
-        public void SetDataError(string propertyName, string error) => errorChanged.OnNext(new DataErrorChanged(propertyName, error));
+        public void SetDataError(string propertyName, string error)
+        {
+            if (string.IsNullOrEmpty(error))
+            {
+                errors.TryRemove(propertyName, out _);
+            }
+            else
+            {
+                errors.AddOrUpdate(propertyName, new List<string> { error }, (_, list) =>
+                {
+                    list.Add(error);
+                    return list;
+                });
+            }
+            errorChanged.OnNext(new DataErrorChanged(propertyName, error));
+        }
 
-        public void ResetDataError(string propertyName) => errorChanged.OnNext(new DataErrorChanged(propertyName, ""));
+        public void ResetDataError(string propertyName)
+        {
+            errors.TryRemove(propertyName, out _);
+            errorChanged.OnNext(new DataErrorChanged(propertyName, ""));
+        }
 
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {
