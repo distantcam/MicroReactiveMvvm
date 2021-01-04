@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -26,7 +27,7 @@ namespace MicroReactiveMVVM
         private PropertyChangedEventHandler? propertyChanged;
         private PropertyChangingEventHandler? propertyChanging;
 
-        private readonly ConcurrentDictionary<string, string> errors = new ConcurrentDictionary<string, string>();
+        private readonly ConcurrentDictionary<string, List<string>> errors = new ConcurrentDictionary<string, List<string>>();
         private EventHandler<DataErrorsChangedEventArgs>? errorsChanged;
 
         public ReactiveObject()
@@ -58,7 +59,11 @@ namespace MicroReactiveMVVM
                     }
                     else
                     {
-                        errors.AddOrUpdate(args.PropertyName, args.Error, (_, __) => args.Error);
+                        errors.AddOrUpdate(args.PropertyName, new List<string> { args.Error }, (_, list) =>
+                        {
+                            list.Add(args.Error);
+                            return list;
+                        });
                     }
                     errorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(args.PropertyName));
                 });
@@ -169,8 +174,8 @@ namespace MicroReactiveMVVM
 
         bool INotifyDataErrorInfo.HasErrors => errors.Count != 0;
 
-        IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName) =>
-            errors.TryGetValue(propertyName, out string value) ? value : "";
+        IEnumerable? INotifyDataErrorInfo.GetErrors(string propertyName) =>
+            errors.TryGetValue(propertyName, out var value) ? value : null;
 
         event EventHandler<DataErrorsChangedEventArgs> INotifyDataErrorInfo.ErrorsChanged
         {
