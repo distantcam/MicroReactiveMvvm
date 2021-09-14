@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -14,6 +14,11 @@ namespace MicroReactiveMVVM
             var collection = new ObservableCollection<T>();
             source.Subscribe(t => collection.Add(t));
             return collection;
+        }
+
+        public static void DisposeWith(this IDisposable disposable, ReactiveObject reactiveObject)
+        {
+            reactiveObject.AddDisposable(disposable);
         }
 
         public static IObservable<PropertyChangedData> WhenPropertyChanged(this IObservablePropertyChanged changed, string propertyName)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -18,9 +18,9 @@ namespace MicroReactiveMVVM
         private Subject<PropertyChangingData> changing;
         private Subject<DataErrorChanged> errorChanged;
 
-        readonly IObservable<PropertyChangedData> whenChanged;
-        readonly IObservable<PropertyChangingData> whenChanging;
-        readonly IObservable<DataErrorChanged> whenErrorChanged;
+        private readonly IObservable<PropertyChangedData> whenChanged;
+        private readonly IObservable<PropertyChangingData> whenChanging;
+        private readonly IObservable<DataErrorChanged> whenErrorChanged;
 
         private volatile int disposeSignaled;
 
@@ -30,8 +30,12 @@ namespace MicroReactiveMVVM
         private readonly ConcurrentDictionary<string, List<string>> errors = new ConcurrentDictionary<string, List<string>>();
         private EventHandler<DataErrorsChangedEventArgs>? errorsChanged;
 
+        private readonly CompositeDisposable disposables;
+
         public ReactiveObject()
         {
+            disposables = new CompositeDisposable();
+
             changed = new Subject<PropertyChangedData>();
             whenChanged = changed.AsObservable();
             whenChanged.ObserveOnMain()
@@ -76,6 +80,10 @@ namespace MicroReactiveMVVM
             {
                 return;
             }
+            if (!disposables.IsDisposed)
+            {
+                disposables.Dispose();
+            }
             if (changing != null)
             {
                 changing.OnCompleted();
@@ -91,6 +99,11 @@ namespace MicroReactiveMVVM
                 errorChanged.OnCompleted();
                 errorChanged.Dispose();
             }
+        }
+
+        public void AddDisposable(IDisposable item)
+        {
+            disposables.Add(item);
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
