@@ -112,6 +112,18 @@ namespace MicroReactiveMVVM
                 changed.OnNext(new PropertyChangedData(this, propertyName));
         }
 
+        protected virtual void OnPropertyChanged(params string[] propertyNames)
+        {
+            if (!ChangeNotificationEnabled)
+            {
+                return;
+            }
+            foreach (var propertyName in propertyNames)
+            {
+                changed.OnNext(new PropertyChangedData(this, propertyName));
+            }
+        }
+
         protected virtual void OnPropertyChanging(string propertyName, object? before)
         {
             if (ChangeNotificationEnabled)
